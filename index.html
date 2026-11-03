@@ -3,103 +3,142 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Maps Studio</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#12161c;color:#fff;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-#top{display:flex;gap:5px;padding:6px;overflow-x:auto;background:#1b212b;flex:none}
-#top button{flex:none}
-.sep{width:1px;background:#3a4354;flex:none}
-button{background:#2a3240;color:#fff;border:0;border-radius:8px;padding:9px 11px;font-size:12px}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Segoe UI,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:#14161a;color:#e8eaed;height:100dvh;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100dvh}
+button{background:#2d323c;color:#e8eaed;border:0;border-radius:6px;padding:7px 9px;font-size:12px}
 button.on,button.pri{background:#0a84ff}
-#stage{flex:1;position:relative;min-height:0}
+button.red{background:#e53935}
+input,select,textarea{width:100%;background:#12141a;color:#fff;border:1px solid #3a4150;border-radius:5px;padding:6px;font-size:12px}
+input[type=checkbox]{width:auto}input[type=color]{padding:1px;height:30px}input[type=range]{padding:0}
+label{font-size:10px;color:#9aa3b2;display:block;margin:5px 0 2px}
+small,.mut{color:#9aa3b2;font-size:10px}
+#menubar{height:36px;display:flex;align-items:center;gap:4px;padding:0 6px;background:#1b1d22;border-bottom:1px solid #000;flex:none;overflow-x:auto}
+#menubar button{flex:none}
+#logo{font-size:11px;letter-spacing:1px;color:#0a84ff;margin-right:4px;flex:none}
+.rt{background:transparent!important;border-radius:0!important;border-bottom:2px solid transparent;padding:9px 7px!important}
+.rt.on{border-bottom-color:#0a84ff;color:#fff}
+#ribbon{display:flex;gap:3px;padding:4px 6px;background:#23262d;overflow-x:auto;flex:none;border-bottom:1px solid #000}
+#ribbon.hide{display:none}
+.rb{flex:none;min-width:48px;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:9px;background:#2d323c;border-radius:6px;padding:2px 4px;position:relative}
+.rb i{font-style:normal;font-size:17px;line-height:1}
+.rb.on{background:#0a84ff}
+.rb input[type=color]{position:absolute;inset:0;opacity:0;width:100%;height:100%;padding:0;border:0}
+.rsep{width:1px;background:#3a4150;flex:none;margin:2px}
+#main{flex:1;display:flex;min-height:0}
+.dock{display:flex;flex-direction:column;background:#1e2127;flex:none;overflow:hidden;min-width:100px}
+.dock.hide,.rs.hide,.hide{display:none}
+.rs{width:9px;flex:none;background:#101215;touch-action:none;position:relative}
+.rs::after{content:"";position:absolute;left:3px;top:calc(50% - 14px);width:3px;height:28px;background:#667;border-radius:2px}
+#stage{flex:1;position:relative;min-width:0}
 canvas{width:100%;height:100%;display:block;touch-action:none}
-#hint{position:absolute;left:6px;bottom:6px;right:6px;font-size:11px;background:#000a;padding:5px 8px;border-radius:8px;display:flex;justify-content:space-between;gap:8px}
-#tabs{display:flex;background:#1b212b;flex:none}
-#tabs button{flex:1;border-radius:0;background:#1b212b;border-bottom:2px solid transparent;padding:9px 4px}
-#tabs button.on{border-bottom-color:#0a84ff;background:#242c39}
-#sheet{height:34vh;overflow-y:auto;background:#242c39;padding:10px;flex:none}
-.pn{display:none}.pn.on{display:block}
-label{font-size:11px;color:#9ab;display:block;margin:6px 0 2px}
-input,select,textarea{width:100%;background:#12161c;color:#fff;border:1px solid #3a4354;border-radius:6px;padding:8px;font-size:13px}
-textarea{font-family:monospace;font-size:12px}
-input[type=color]{padding:2px;height:36px}
-input[type=checkbox]{width:auto}
-input[type=range]{padding:0}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.r{display:flex;gap:6px}
-.it{padding:8px;border-radius:6px;font-size:13px}
-.it.ch{margin-left:14px}.it.s{background:#0a84ff55}
-small,.mut{color:#9ab;font-size:11px}
-#modal{display:none;position:fixed;inset:0;background:#000c;z-index:9;overflow-y:auto;padding:14px}
-#modal.on{display:block}
-#box{background:#1b212b;border-radius:14px;padding:14px;max-width:480px;margin:auto}
-#log{white-space:pre-wrap;font-size:12px;background:#000;padding:8px;border-radius:8px;margin-top:8px;max-height:140px;overflow:auto}
-#hud{position:absolute;top:6px;left:6px;right:6px;display:none;justify-content:space-between;align-items:center;font-size:14px;font-weight:bold;text-shadow:0 1px 3px #000}
-#joy{position:absolute;left:14px;bottom:24px;width:110px;height:110px;border-radius:50%;background:#fff3;display:none;touch-action:none}
+.edge{position:absolute;top:calc(50% - 26px);width:18px;height:52px;background:#000b;color:#fff;display:none;align-items:center;justify-content:center;font-size:13px;z-index:3}
+.edge.show{display:flex}#el{left:0;border-radius:0 8px 8px 0}#er{right:0;border-radius:8px 0 0 8px}
+#tip{position:absolute;left:24px;bottom:4px;font-size:10px;background:#000a;padding:2px 7px;border-radius:6px;pointer-events:none}
+.sec{display:flex;flex-direction:column;flex:1 1 0;min-height:30px;border-top:1px solid #000}
+.sh{display:flex;align-items:center;gap:4px;background:#2a2e36;padding:3px 6px;font-size:11px;font-weight:bold;flex:none}
+.sh .chev{flex:none;padding:3px 0}.sh input{padding:3px 5px;font-size:11px}
+.sb{flex:1;overflow:auto;padding:3px}
+.sec.col .sb{display:none}.sec.col{flex:none}
+.tr{display:flex;align-items:center;gap:4px;padding:5px 3px;font-size:12px;border-radius:4px;white-space:nowrap}
+.tr.s{background:#0a84ff66}.tr .ar{width:16px;text-align:center;color:#9aa3b2}.tr .nm{overflow:hidden;text-overflow:ellipsis}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.r{display:flex;gap:4px}
+.ltabs{display:flex;background:#2a2e36;flex:none}.ltabs button{flex:1;border-radius:0;background:transparent;padding:8px 2px}.ltabs button.on{background:#0a84ff}
+.lbody{flex:1;overflow:auto;padding:6px}
+#out{height:84px;background:#0c0d10;flex:none;display:flex;flex-direction:column;border-top:1px solid #000}
+.oh{display:flex;gap:4px;align-items:center;padding:2px 6px;background:#2a2e36;font-size:11px}.oh b{flex:1}.oh button{padding:2px 8px}
+#olog{flex:1;overflow:auto;font:11px monospace;padding:3px 6px}.err{color:#ff6b6b}.ok{color:#5be08a}
+.ov{display:none;position:fixed;inset:0;background:#000c;z-index:20;padding:12px;overflow:auto}.ov.on{display:block}
+.card{background:#1e2127;border-radius:12px;padding:12px;max-width:460px;margin:auto}
+.ii{padding:10px;border-bottom:1px solid #2d323c;display:flex;justify-content:space-between;gap:8px;font-size:13px}
+#ed{display:none;position:fixed;inset:0;background:#14161a;z-index:30;flex-direction:column}#ed.on{display:flex}
+#edb{display:flex;gap:4px;padding:6px;background:#1b1d22;align-items:center;overflow-x:auto}#edb button,#edb select{flex:none;width:auto}
+#edt{flex:1;border:0;border-radius:0;font:13px monospace;resize:none;tab-size:2;white-space:pre}
+#plog{white-space:pre-wrap;font-size:12px;background:#000;padding:8px;border-radius:8px;margin-top:8px;max-height:140px;overflow:auto}
+#hud{position:absolute;top:6px;left:6px;right:6px;display:none;justify-content:space-between;align-items:center;font-size:14px;font-weight:bold;text-shadow:0 1px 3px #000;z-index:4}
+#joy{position:absolute;left:14px;bottom:24px;width:110px;height:110px;border-radius:50%;background:#fff3;display:none;touch-action:none;z-index:4}
 #knob{position:absolute;left:35px;top:35px;width:40px;height:40px;border-radius:50%;background:#fffb;pointer-events:none}
-#jb{position:absolute;right:18px;bottom:34px;width:76px;height:76px;border-radius:50%;background:#0a84ffcc;display:none;touch-action:none;font-size:13px}
-body.play #top,body.play #tabs,body.play #sheet,body.play #hint{display:none}
+#jb{position:absolute;right:18px;bottom:34px;width:76px;height:76px;border-radius:50%;background:#0a84ffcc;display:none;touch-action:none;z-index:4}
+body.play #menubar,body.play #ribbon,body.play .dock,body.play .rs,body.play #out,body.play .edge,body.play #tip{display:none!important}
 body.play #hud{display:flex}body.play #joy,body.play #jb{display:block}
-</style></head><body>
+@media(max-width:520px){#logo{display:none}}
+</style></head><body><div id="app">
 
-<div id="top">
-<button data-tool="select" class="on">Select</button><button data-tool="move">Move</button><button data-tool="scale">Scale</button><button data-tool="rotate">Rotate</button>
-<span class="sep"></span>
-<button data-add="Part">+Part</button><button data-add="Ball">+Ball</button><button data-add="Cylinder">+Cyl</button>
-<span class="sep"></span>
-<button id="bdup">Dup</button><button id="bdel">Hapus</button><button id="bund">Undo</button><button id="bred">Redo</button>
-<span class="sep"></span>
-<button id="bplay" class="pri">▶ Play</button><button id="bpub" class="pri">Publish</button>
+<div id="menubar"><b id="logo">MAPS STUDIO</b>
+<button class="rt on" data-rt="home">HOME</button><button class="rt" data-rt="model">MODEL</button><button class="rt" data-rt="game">GAME</button><button class="rt" data-rt="view">VIEW</button>
+<span style="flex:1"></span>
+<button id="bund">↶</button><button id="bred">↷</button><button id="bplay" class="pri">▶ Play</button><button id="bpub" class="pri">☁ Publish</button></div>
+<div id="ribbon"></div>
+
+<div id="main">
+<div class="dock hide" id="ldock" style="width:190px">
+ <div class="ltabs"><button class="ltab on" data-l="tool">Toolbox</button><button class="ltab" data-l="terr">Terrain</button><button class="ltab" data-l="lit">Light</button></div>
+ <div class="lbody">
+  <div class="lp" id="lp-tool">
+   <label>ID Toolbox (boleh banyak, pisah koma/spasi)</label><input id="tid" placeholder="123456789, 987654321">
+   <label>Nama (opsional)</label><input id="tname">
+   <button id="tadd" class="pri" style="width:100%;margin-top:8px">Tambah ke Workspace</button>
+   <p class="mut" style="margin-top:8px">ID ada di URL Creator Store. Model tampil sebagai kotak ungu dan dimuat otomatis saat game jalan di Roblox (InsertService). Model harus public atau milikmu.</p>
+  </div>
+  <div class="lp hide" id="lp-terr">
+   <div class="g3" id="bio"></div>
+   <label>Luas area (stud)</label><select id="tsz"><option>128</option><option selected>256</option><option>512</option></select>
+   <label>Tinggi dasar</label><input type="range" id="tbase" min="-30" max="30" value="0">
+   <label>Seed</label><div class="r"><input type="number" id="tseed" value="1"><button id="trnd">Acak</button></div>
+   <div class="r" style="margin-top:8px"><button id="tgen" class="pri" style="flex:1">Generate</button><button id="tdel">Hapus</button></div>
+  </div>
+  <div class="lp hide" id="lp-lit">
+   <label>Waktu (ClockTime): <span id="cl">14</span></label><input type="range" id="clock" min="0" max="24" step="0.5" value="14">
+  </div>
+ </div>
 </div>
+<div class="rs hide" id="lrs"></div>
 
 <div id="stage"><canvas id="cv"></canvas>
-<div id="hud"><span id="hs"></span><button id="bstop" style="background:#e53935">■ Stop</button></div>
-<div id="joy"><div id="knob"></div></div><button id="jb">Lompat</button>
-<div id="hint"><span id="ht"></span><label style="margin:0;white-space:nowrap"><input type="checkbox" id="snap" checked> Snap</label></div></div>
+ <div class="edge show" id="el">▸</div><div class="edge show" id="er">◂</div>
+ <div id="hud"><span id="hs"></span><button id="bstop" class="red">■ Stop</button></div>
+ <div id="joy"><div id="knob"></div></div><button id="jb">Lompat</button>
+ <div id="tip"></div>
+</div>
 
-<div id="tabs"><button data-t="list" class="on">Explorer</button><button data-t="props">Properties</button><button data-t="terr">Terrain</button><button data-t="tool">Toolbox</button><button data-t="game">Game</button></div>
-<div id="sheet">
-<div class="pn on" id="p-list"><div id="list"></div></div>
-<div class="pn" id="p-props"><div id="props"></div></div>
-<div class="pn" id="p-terr">
-<div class="g3" id="bio"></div>
-<label>Luas area (stud)</label><select id="tsz"><option>128</option><option selected>256</option><option>512</option></select>
-<label>Tinggi dasar</label><input type="range" id="tbase" min="-30" max="30" value="0">
-<label>Seed</label><div class="r"><input type="number" id="tseed" value="1"><button id="trnd">Seed acak</button></div>
-<div class="r" style="margin-top:10px"><button id="tgen" class="pri" style="flex:1">Generate</button><button id="tdel">Hapus terrain</button></div>
-</div>
-<div class="pn" id="p-tool">
-<label>ID Toolbox (boleh banyak, pisahkan koma/spasi)</label>
-<input id="tid" placeholder="contoh: 123456789, 987654321">
-<label>Nama (opsional, untuk ID tunggal)</label><input id="tname">
-<button id="tadd" class="pri" style="width:100%;margin-top:10px">Tambah ke map</button>
-<p class="mut" style="margin-top:8px">ID ada di URL Creator Store (angka di akhir link model). Model muncul sebagai kotak ungu di editor dan dimuat otomatis saat game jalan di Roblox (via InsertService). Model harus public atau milik kamu.</p>
-</div>
-<div class="pn" id="p-game">
-<label>Tambah objek game</label>
-<div class="g3"><button data-role="Spawn">Spawn</button><button data-role="Kill">Kill brick</button><button data-role="Check">Checkpoint</button><button data-role="Coin">Coin</button><button data-role="Jump">Jump pad</button></div>
-<label>Waktu (ClockTime): <span id="cl">14</span></label><input type="range" id="clock" min="0" max="24" step="0.5" value="14">
-<label>Script Lua custom (masuk ServerScriptService)</label>
-<textarea id="lua" rows="6" placeholder="print('Halo dari Maps Studio')"></textarea>
+<div class="rs hide" id="rrs"></div>
+<div class="dock hide" id="rdock" style="width:170px">
+ <div class="sec" id="sx"><div class="sh"><span class="chev" data-c="sx">▾ Explorer</span><input id="qf" placeholder="cari..."></div><div class="sb" id="tree"></div></div>
+ <div class="sec" id="sp"><div class="sh"><span class="chev" data-c="sp">▾ Properties</span></div><div class="sb" id="props"></div></div>
 </div>
 </div>
 
-<div id="modal"><div id="box">
-<h3 style="margin-bottom:8px">Publish Map</h3>
+<div id="out" class="hide"><div class="oh"><b>Output</b><button id="oclr">Bersihkan</button><button id="ocls">✕</button></div><div id="olog"></div></div>
+</div>
+
+<div class="ov" id="ins"><div class="card"><input id="iq" placeholder="Cari objek..."><div id="il" style="margin-top:6px"></div><button id="icl" style="width:100%;margin-top:8px">Tutup</button></div></div>
+
+<div id="ed"><div id="edb"><b id="edn" style="flex:1;font-size:12px"></b>
+<select id="edtp"><option value="">Template...</option><option value="hello">Hello</option><option value="touch">Touched</option><option value="ls">Leaderstats</option><option value="loop">Loop</option><option value="remote">RemoteEvent</option></select>
+<button id="edm">A-</button><button id="edp">A+</button><button id="edtab">Tab</button><button id="edx" class="pri">Simpan</button></div>
+<textarea id="edt" spellcheck="false"></textarea></div>
+
+<div class="ov" id="modal"><div class="card">
+<h3 style="margin-bottom:6px">Publish Map</h3>
 <label>API Key (Open Cloud)</label><input type="password" id="ak" placeholder="Izin: universe-places:write">
 <label>Universe ID</label><input id="un" inputmode="numeric">
 <label>Place ID</label><input id="pl" inputmode="numeric">
-<label>Tipe versi</label><select id="vt"><option value="Saved">Saved (disimpan, belum rilis)</option><option value="Published">Published (langsung rilis)</option></select>
+<label>Tipe versi</label><select id="vt"><option value="Saved">Saved (belum rilis)</option><option value="Published">Published (langsung rilis)</option></select>
 <label>URL Worker proxy (wajib dari browser)</label><input id="pxy" placeholder="https://nama.workers.dev">
 <div class="r" style="margin-top:10px"><button id="bexp" style="flex:1">Export .rbxlx</button><button id="bsend" class="pri" style="flex:1">Publish</button></div>
-<button id="bclose" style="width:100%;margin-top:8px">Tutup</button>
-<div id="log">Siap.</div>
-</div></div>
+<button id="bclose" style="width:100%;margin-top:8px">Tutup</button><div id="plog">Siap.</div></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const HS=60,HW=1,HH=2.5;
+const SVC=['Workspace','ReplicatedStorage','ServerScriptService','ServerStorage','StarterGui','StarterPack','StarterPlayerScripts'];
+const SICO={Workspace:'🌍',ReplicatedStorage:'📡',ServerScriptService:'📜',ServerStorage:'🗄',StarterGui:'🖥',StarterPack:'🎒',StarterPlayerScripts:'🏃'};
+const ICO={Part:'🧱',Model:'📦',Folder:'📁',Asset:'🧰',Script:'📜',LocalScript:'📱',ModuleScript:'🧩',Sound:'🔊',PointLight:'💡',ScreenGui:'🖼',TextLabel:'🔤'};
+const MATS={Plastic:256,Wood:512,Concrete:816,Brick:848,Grass:1280,Sand:1296,Neon:288,Glass:1568};
+const ROLES={Spawn:{c:'#9e9e9e',s:[6,1,6],can:true,t:'Block'},Kill:{c:'#e53935',s:[8,1,8],can:true,t:'Block'},Check:{c:'#43a047',s:[8,1,8],can:true,t:'Block'},Coin:{c:'#fdd835',s:[2,2,2],can:false,t:'Ball'},Jump:{c:'#00e5ff',s:[6,1,6],can:true,t:'Block'}};
+const CAT=[['Part','Block (Part)','Part 3D dasar'],['Ball','Sphere','Part bulat'],['Cylinder','Cylinder','Part silinder'],['Model','Model','Wadah objek'],['Folder','Folder','Pengelompok'],['Script','Script','Script server'],['LocalScript','LocalScript','Script client'],['ModuleScript','ModuleScript','Modul bersama'],['Sound','Sound','Audio (ID)'],['PointLight','PointLight','Lampu (di dalam Part)'],['ScreenGui','ScreenGui','Wadah UI'],['TextLabel','TextLabel','Teks UI (di dalam ScreenGui)'],['Spawn','SpawnLocation','Titik spawn'],['Kill','Kill Brick','Mati saat disentuh'],['Check','Checkpoint','Simpan progres'],['Coin','Coin','Koin kumpulan'],['Jump','Jump Pad','Pegas lompat']];
 
 /* ---------- three ---------- */
 const cv=$('cv'),renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
@@ -108,28 +147,46 @@ const scene=new THREE.Scene();scene.background=new THREE.Color(0x87b6e8);
 const cam=new THREE.PerspectiveCamera(60,1,0.1,4000);
 const hemi=new THREE.HemisphereLight(0xffffff,0x556677,0.9);scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xffffff,0.6);sun.position.set(100,200,80);scene.add(sun);
-const grid=new THREE.GridHelper(512,64,0x333333,0x555555);grid.position.y=0.03;scene.add(grid);
-const selBox=new THREE.BoxHelper(new THREE.Object3D(),0x00a2ff);selBox.visible=false;scene.add(selBox);
-function resize(){const s=$('stage');renderer.setSize(s.clientWidth,s.clientHeight,false);cam.aspect=s.clientWidth/s.clientHeight;cam.updateProjectionMatrix()}
+const gridM=new THREE.GridHelper(512,64,0x333333,0x555555);gridM.position.y=0.03;scene.add(gridM);
+function resize(){const s=$('stage');if(!s.clientWidth)return;renderer.setSize(s.clientWidth,s.clientHeight,false);cam.aspect=s.clientWidth/s.clientHeight;cam.updateProjectionMatrix()}
 new ResizeObserver(resize).observe($('stage'));
-
-/* ---------- kamera ---------- */
 const C={t:new THREE.Vector3(0,0,0),d:140,yaw:.8,pitch:.6};
 function updCam(){C.pitch=Math.max(.05,Math.min(1.5,C.pitch));C.d=Math.max(3,Math.min(2000,C.d));
 cam.position.set(C.t.x+C.d*Math.cos(C.pitch)*Math.sin(C.yaw),C.t.y+C.d*Math.sin(C.pitch),C.t.z+C.d*Math.cos(C.pitch)*Math.cos(C.yaw));cam.lookAt(C.t)}
+const resetCam=()=>{C.t.set(0,0,0);C.d=140;C.yaw=.8;C.pitch=.6};
 
 /* ---------- state ---------- */
-let objs=[],terrain=null,terrMesh=null,sel=null,tool='select',nid=1,hist=[],hi=-1,sampler=null,clock=14,lua='';
-const MATS={Plastic:256,Wood:512,Concrete:816,Brick:848,Grass:1280,Sand:1296,Neon:288,Glass:1568};
-const ROLES={Spawn:{c:'#9e9e9e',s:[6,1,6],can:true,t:'Part'},Kill:{c:'#e53935',s:[8,1,8],can:true,t:'Part'},Check:{c:'#43a047',s:[8,1,8],can:true,t:'Part'},Coin:{c:'#fdd835',s:[2,2,2],can:false,t:'Ball'},Jump:{c:'#00e5ff',s:[6,1,6],can:true,t:'Part'}};
+let items=[],nid=1,terrain=null,terrMesh=null,sampler=null,clock=14,hist=[],hi=-1;
+let selIds=new Set(),curSvc=null,tool='select',multi=false,gsnap=1,clip=[],play=null,rtab='home',lastTap={k:null,t:0};
+const exp=new Set(['Workspace']);
+const byId=id=>items.find(i=>i.id===id);
+const kids=p=>items.filter(i=>i.par===p);
+const is3D=i=>i.cls==='Part'||i.cls==='Asset';
+function rootSvc(it){let c=it;while(typeof c.par==='number'){c=byId(c.par);if(!c)return null}return c.par}
+const isWS=it=>rootSvc(it)==='Workspace';
+function desc(it,o=[]){kids(it.id).forEach(k=>{o.push(k);desc(k,o)});return o}
+function S1(){const a=[...selIds];return a.length?byId(a[a.length-1]):null}
+function selParts(){const s=new Set();selIds.forEach(id=>{const it=byId(id);if(!it)return;if(is3D(it))s.add(it);desc(it).forEach(d=>is3D(d)&&s.add(d))});return[...s].filter(isWS)}
+const snapv=v=>gsnap>0?Math.round(v/gsnap)*gsnap:v;
+function out(m,t){const d=document.createElement('div');d.className=t||'';d.textContent=m;$('olog').appendChild(d);$('olog').scrollTop=1e9}
 
-function mkMesh(o){
-const g=o.type==='Ball'?new THREE.SphereGeometry(.5,24,16):o.type==='Cylinder'?new THREE.CylinderGeometry(.5,.5,1,24).rotateZ(Math.PI/2):new THREE.BoxGeometry(1,1,1);
-const m=new THREE.Mesh(g,new THREE.MeshLambertMaterial({color:o.color}));
-if(o.type==='Asset'){m.material.transparent=true;m.material.opacity=.55}
-m.userData.o=o;o.mesh=m;scene.add(m);sync(o)}
-function sync(o){const m=o.mesh;m.position.set(o.pos[0],o.pos[1],o.pos[2]);m.scale.set(o.size[0],o.size[1],o.size[2]);m.rotation.y=o.ry*Math.PI/180;m.material.color.set(o.color)}
-function newObj(type,pos,size,color,name){const o={id:nid++,name:name||type,type,pos,size,ry:0,color:color||'#a3a2a5',mat:'Plastic',role:'None',can:true};objs.push(o);mkMesh(o);return o}
+const DEF={
+Part:()=>({shape:'Block',pos:[0,2,0],size:[8,2,8],ry:0,color:'#a3a2a5',mat:'Plastic',role:'None',anch:true,can:true,lock:false}),
+Asset:()=>({shape:'Block',pos:[0,3,0],size:[4,4,4],ry:0,color:'#b84dff',assetId:0}),
+Script:()=>({src:'print("Halo dari Maps Studio")'}),LocalScript:()=>({src:'print("Halo client")'}),
+ModuleScript:()=>({src:'local M={}\n\nreturn M'}),
+Sound:()=>({soundId:0,loop:true,vol:.5}),PointLight:()=>({bright:1,range:16,lcolor:'#ffffff'}),
+TextLabel:()=>({text:'Halo',textSize:24,gx:10,gy:10,gw:200,gh:40,bg:'#000000',fg:'#ffffff'}),
+Model:()=>({}),Folder:()=>({}),ScreenGui:()=>({})};
+function add(cls,props,par){const it={id:nid++,name:cls,cls,par,...DEF[cls](),...props};items.push(it);if(is3D(it))mkMesh(it);return it}
+
+function geom(it){return it.shape==='Ball'?new THREE.SphereGeometry(.5,24,16):it.shape==='Cylinder'?new THREE.CylinderGeometry(.5,.5,1,24).rotateZ(Math.PI/2):new THREE.BoxGeometry(1,1,1)}
+function mkMesh(it){const m=new THREE.Mesh(geom(it),new THREE.MeshLambertMaterial({color:it.color}));
+if(it.cls==='Asset'){m.material.transparent=true;m.material.opacity=.55}
+m.userData.id=it.id;it.mesh=m;scene.add(m);sync(it)}
+function sync(it){const m=it.mesh;if(!m)return;m.position.set(it.pos[0],it.pos[1],it.pos[2]);m.scale.set(it.size[0],it.size[1],it.size[2]);
+m.rotation.y=it.ry*Math.PI/180;m.material.color.set(it.color);m.visible=isWS(it)&&!(play&&it.cls==='Asset')}
+const syncAll=()=>items.forEach(sync);
 function applyClock(){const d=Math.max(0,Math.sin((clock-6)/12*Math.PI));scene.background.setRGB(.04+.49*d,.05+.66*d,.12+.79*d);hemi.intensity=.3+.6*d;sun.intensity=.1+.6*d;$('cl').textContent=clock}
 
 /* ---------- terrain ---------- */
@@ -167,107 +224,190 @@ for(let i=0;i<pos.count;i++){const s=sampler(pos.getX(i),pos.getZ(i));pos.setY(i
 g.setAttribute('color',new THREE.BufferAttribute(col,3));g.computeVertexNormals();
 terrMesh=new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true}));scene.add(terrMesh)}
 const groundY=(x,z)=>sampler?sampler(x,z).y:0;
-
-/* ---------- history ---------- */
-function snap(){return JSON.stringify({objs:objs.map(o=>{const{mesh,...r}=o;return r}),terrain,nid,clock,lua})}
-function restore(s){const d=JSON.parse(s),sid=sel&&sel.id;
-objs.forEach(o=>scene.remove(o.mesh));objs=d.objs;terrain=d.terrain;nid=d.nid;clock=d.clock??14;lua=d.lua||'';
-objs.forEach(o=>{if(o.role===undefined)o.role='None';if(o.can===undefined)o.can=true;mkMesh(o)});
-buildTerrain();$('clock').value=clock;$('lua').value=lua;applyClock();
-sel=objs.find(o=>o.id===sid)||null;renderList();renderProps()}
-function push(){hist=hist.slice(0,hi+1);const s=snap();hist.push(s);if(hist.length>60)hist.shift();hi=hist.length-1;
-try{localStorage.setItem('mapstudio2',s)}catch(e){}}
-$('bund').onclick=()=>{if(hi>0){hi--;restore(hist[hi])}};
-$('bred').onclick=()=>{if(hi<hist.length-1){hi++;restore(hist[hi])}};
-
-/* ---------- UI ---------- */
-const HINTS={select:'Ketuk objek untuk memilih. Geser = putar kamera, 2 jari = zoom/geser.',move:'Seret objek terpilih untuk memindah.',scale:'Seret objek terpilih naik/turun untuk ubah ukuran.',rotate:'Seret objek terpilih kiri/kanan untuk memutar.'};
-function setTool(t){tool=t;document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('on',b.dataset.tool===t));$('ht').textContent=HINTS[t]}
-document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
-document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
-document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
-document.querySelectorAll('.pn').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.t))});
-function select(o){sel=o;renderList();renderProps()}
-function renderList(){$('list').innerHTML='<div class="it"><b>Workspace</b></div>'+(terrain?`<div class="it ch">Terrain <small>${terrain.biome} ${terrain.size}</small></div>`:'')+
-objs.map(o=>`<div class="it ch${o===sel?' s':''}" data-id="${o.id}">${esc(o.name)} <small>${o.type}${o.role&&o.role!=='None'?' · '+o.role:''}${o.type==='Asset'?' · '+(o.assetId||'?'):''}</small></div>`).join('')}
-$('list').onclick=e=>{const d=e.target.closest('[data-id]');if(d)select(objs.find(o=>o.id==d.dataset.id))};
-function renderProps(){const p=$('props');
-if(!sel){p.innerHTML='<p class="mut">Pilih objek (ketuk di layar atau di Explorer).</p>';return}
-const as=sel.type==='Asset';
-const tri=(k,l)=>'<div class="g3">'+[0,1,2].map(i=>`<div><label>${l} ${'XYZ'[i]}</label><input type="number" step="1" data-k="${k}" data-i="${i}" value="${+sel[k][i].toFixed(2)}"></div>`).join('')+'</div>';
-p.innerHTML=`<label>Nama</label><input data-k="name" value="${esc(sel.name)}">`
-+(as?`<label>ID Toolbox</label><input type="number" data-k="assetId" value="${sel.assetId||''}">`:'')
-+tri('pos','Pos')+(as?'':tri('size','Size'))
-+`<label>Rotasi Y (derajat)</label><input type="number" data-k="ry" value="${+sel.ry.toFixed(1)}">`
-+(as?'':`<label>Warna</label><input type="color" data-k="color" value="${sel.color}">
-<label>Material</label><select data-k="mat">${Object.keys(MATS).map(m=>`<option${m===sel.mat?' selected':''}>${m}</option>`).join('')}</select>
-<label>Role game</label><select data-k="role">${['None',...Object.keys(ROLES)].map(m=>`<option${m===sel.role?' selected':''}>${m}</option>`).join('')}</select>
-<label><input type="checkbox" data-k="can" ${sel.can?'checked':''}> CanCollide</label>`)}
-$('props').onchange=e=>{const t=e.target,k=t.dataset.k;if(!sel||!k)return;
-if(k==='pos'||k==='size'){const v=parseFloat(t.value)||0;sel[k][+t.dataset.i]=k==='size'?Math.max(.1,v):v}
-else if(k==='ry')sel.ry=parseFloat(t.value)||0;
-else if(k==='can')sel.can=t.checked;
-else if(k==='assetId'){sel.assetId=parseInt(t.value)||0}
-else if(k==='role'){sel.role=t.value;const R=ROLES[t.value];if(R){sel.color=R.c;sel.can=R.can}renderProps()}
-else sel[k]=t.value;
-sync(sel);push();renderList()};
-
-/* ---------- insert / dup / hapus ---------- */
-document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const ty=b.dataset.add,sz=ty==='Part'?[8,4,8]:ty==='Ball'?[6,6,6]:[8,6,6];
-const x=Math.round(C.t.x),z=Math.round(C.t.z);select(newObj(ty,[x,groundY(x,z)+sz[1]/2,z],sz));push()});
-document.querySelectorAll('[data-role]').forEach(b=>b.onclick=()=>{const r=b.dataset.role,R=ROLES[r],x=Math.round(C.t.x),z=Math.round(C.t.z);
-const o=newObj(R.t,[x,groundY(x,z)+R.s[1]/2+(r==='Coin'?2:0),z],[...R.s],R.c,r);o.role=r;o.can=R.can;sync(o);select(o);push()});
-$('bdup').onclick=()=>{if(!sel)return;const o=newObj(sel.type,[sel.pos[0]+4,sel.pos[1],sel.pos[2]+4],[...sel.size],sel.color,sel.name+' copy');
-o.ry=sel.ry;o.mat=sel.mat;o.role=sel.role;o.can=sel.can;if(sel.assetId)o.assetId=sel.assetId;sync(o);select(o);push()};
-$('bdel').onclick=()=>{if(!sel)return;scene.remove(sel.mesh);objs=objs.filter(o=>o!==sel);sel=null;renderList();renderProps();push()};
-
-/* ---------- toolbox ---------- */
-$('tadd').onclick=()=>{const ids=$('tid').value.split(/[\s,;]+/).map(v=>parseInt(v)).filter(v=>v>0);
-if(!ids.length)return;const x=Math.round(C.t.x),z=Math.round(C.t.z);let o;
-ids.forEach((id,i)=>{o=newObj('Asset',[x+i*8,groundY(x+i*8,z)+3,z],[4,4,4],'#b84dff',(ids.length===1&&$('tname').value)||('Asset '+id));o.assetId=id});
-select(o);push();$('tid').value='';$('tname').value=''};
-
-/* ---------- game tab ---------- */
-$('clock').oninput=()=>{clock=+$('clock').value;applyClock()};$('clock').onchange=push;
-$('lua').onchange=()=>{lua=$('lua').value;push()};
-
-/* ---------- terrain UI ---------- */
 Object.keys(BIOMES).forEach(n=>{const b=document.createElement('button');b.textContent=n;if(n===tb)b.className='on';
 b.onclick=()=>{tb=n;[...$('bio').children].forEach(x=>x.className='');b.className='on'};$('bio').appendChild(b)});
 $('trnd').onclick=()=>{$('tseed').value=Math.floor(Math.random()*99999);$('tgen').click()};
-$('tgen').onclick=()=>{terrain={biome:tb,size:+$('tsz').value,seed:+$('tseed').value||1,base:+$('tbase').value};buildTerrain();C.d=Math.max(C.d,terrain.size*.8);renderList();push()};
-$('tdel').onclick=()=>{terrain=null;buildTerrain();renderList();push()};
+$('tgen').onclick=()=>{terrain={biome:tb,size:+$('tsz').value,seed:+$('tseed').value||1,base:+$('tbase').value};buildTerrain();C.d=Math.max(C.d,terrain.size*.8);exp.add('Workspace');refresh();push();out('Terrain '+tb+' dibuat','ok')};
+$('tdel').onclick=()=>{terrain=null;buildTerrain();refresh();push()};
 
-/* ---------- input ---------- */
+/* ---------- history ---------- */
+function snap(){return JSON.stringify({items:items.map(i=>{const{mesh,...r}=i;return r}),terrain,nid,clock})}
+function restore(s){const d=JSON.parse(s);items.forEach(i=>i.mesh&&scene.remove(i.mesh));
+items=d.items;terrain=d.terrain;nid=d.nid;clock=d.clock??14;items.forEach(i=>{if(is3D(i))mkMesh(i)});
+buildTerrain();syncAll();selIds=new Set([...selIds].filter(id=>byId(id)));$('clock').value=clock;applyClock();refresh()}
+function push(){hist=hist.slice(0,hi+1);const s=snap();hist.push(s);if(hist.length>60)hist.shift();hi=hist.length-1;try{localStorage.setItem('mapstudio3',s)}catch(e){}}
+$('bund').onclick=()=>{if(hi>0){hi--;restore(hist[hi])}};
+$('bred').onclick=()=>{if(hi<hist.length-1){hi++;restore(hist[hi])}};
+
+/* ---------- selection & tree ---------- */
+function setSel(id,addm){curSvc=null;if(addm&&id!=null){selIds.has(id)?selIds.delete(id):selIds.add(id)}else selIds=new Set(id==null?[]:[id]);refresh()}
+function refresh(){renderTree();renderProps();ribbon()}
+function renderTree(){const q=$('qf').value.trim().toLowerCase();let h='';
+const row=(d,key,ico,name,sub,s,has,open)=>`<div class="tr${s?' s':''}" data-k="${key}" style="padding-left:${3+d*12}px"><span class="ar" data-a="1">${has?(open?'▾':'▸'):'·'}</span><span>${ico}</span><span class="nm">${esc(name)}</span><small>${esc(sub)}</small></div>`;
+const sub=it=>it.role&&it.role!=='None'?it.role:(it.cls==='Part'?'':it.cls==='Asset'?String(it.assetId||'?'):it.cls);
+if(q){items.filter(i=>i.name.toLowerCase().includes(q)).forEach(it=>h+=row(0,it.id,ICO[it.cls]||'•',it.name,sub(it),selIds.has(it.id),false,false))}
+else{const walk=(p,d)=>kids(p).forEach(it=>{const ks=kids(it.id),op=exp.has(it.id);h+=row(d,it.id,ICO[it.cls]||'•',it.name,sub(it),selIds.has(it.id),ks.length>0,op);if(op)walk(it.id,d+1)});
+SVC.forEach(s=>{const k=kids(s),op=exp.has(s),has=k.length>0||(s==='Workspace'&&!!terrain);h+=row(0,s,SICO[s],s,k.length?String(k.length):'',curSvc===s,has,op);
+if(op){if(s==='Workspace'&&terrain)h+=row(1,'terrain','⛰','Terrain',terrain.biome,false,false,false);walk(s,1)}})}
+$('tree').innerHTML=h}
+$('qf').oninput=renderTree;
+$('tree').onclick=e=>{const r=e.target.closest('[data-k]');if(!r)return;const k=r.dataset.k,key=(SVC.includes(k)||k==='terrain')?k:+k;
+if(e.target.closest('[data-a]')&&r.querySelector('.ar').textContent.trim()!=='·'){exp.has(key)?exp.delete(key):exp.add(key);renderTree();return}
+if(key==='terrain'){openLeft('terr');return}
+if(SVC.includes(key)){curSvc=key;selIds=new Set();refresh();return}
+const now=Date.now(),it=byId(key);
+if(lastTap.k===key&&now-lastTap.t<400&&it&&/Script/.test(it.cls)){openEd(it);lastTap.k=null;return}
+lastTap={k:key,t:now};setSel(key,multi)};
+
+/* ---------- properties ---------- */
+function renderProps(){const el=$('props'),s=S1();
+if(!s){el.innerHTML=`<p class="mut">${curSvc?esc(curSvc)+' dipilih. Objek baru akan masuk ke sini.':'Pilih objek di Explorer atau ketuk di layar.'}</p>`;return}
+const n3=(k,l)=>'<div class="g3">'+[0,1,2].map(i=>`<div><label>${l}${'XYZ'[i]}</label><input type="number" step="1" data-k="${k}" data-i="${i}" value="${+s[k][i].toFixed(2)}"></div>`).join('')+'</div>';
+const n=(k,l)=>`<label>${l}</label><input type="number" data-k="${k}" value="${s[k]}">`;
+const t=(k,l)=>`<label>${l}</label><input data-k="${k}" value="${esc(s[k])}">`;
+const c=(k,l)=>`<label>${l}</label><input type="color" data-k="${k}" value="${s[k]}">`;
+const ck=(k,l)=>`<label><input type="checkbox" data-k="${k}" ${s[k]?'checked':''}> ${l}</label>`;
+const sl=(k,l,o)=>`<label>${l}</label><select data-k="${k}">${o.map(m=>`<option${m===s[k]?' selected':''}>${m}</option>`).join('')}</select>`;
+let h=t('name','Nama')+`<small>Class: ${s.cls}</small>`;
+if(s.cls==='Part')h+=n3('pos','Pos ')+n3('size','Size ')+n('ry','Rotasi Y')+c('color','Warna')+sl('mat','Material',Object.keys(MATS))+sl('shape','Shape',['Block','Ball','Cylinder'])+sl('role','Role game',['None',...Object.keys(ROLES)])+ck('anch','Anchored')+ck('can','CanCollide')+ck('lock','Locked');
+else if(s.cls==='Asset')h+=n('assetId','ID Toolbox')+n3('pos','Pos ')+n('ry','Rotasi Y');
+else if(/Script/.test(s.cls))h+=`<button id="pedit" class="pri" style="width:100%;margin-top:6px">Edit Script</button>`;
+else if(s.cls==='Sound')h+=n('soundId','Sound ID')+n('vol','Volume')+ck('loop','Looped');
+else if(s.cls==='PointLight')h+=n('bright','Brightness')+n('range','Range')+c('lcolor','Warna');
+else if(s.cls==='TextLabel')h+=t('text','Teks')+n('textSize','Ukuran teks')+n('gx','Pos X (px)')+n('gy','Pos Y (px)')+n('gw','Lebar (px)')+n('gh','Tinggi (px)')+c('bg','Warna latar')+c('fg','Warna teks');
+const bad=new Set([s.id,...desc(s).map(d=>d.id)]);
+const opts=SVC.map(v=>`<option value="${v}"${s.par===v?' selected':''}>${v}</option>`).join('')+items.filter(i=>['Model','Folder','Part','ScreenGui'].includes(i.cls)&&!bad.has(i.id)).map(i=>`<option value="${i.id}"${s.par===i.id?' selected':''}>${ICO[i.cls]} ${esc(i.name)}</option>`).join('');
+el.innerHTML=h+`<label>Parent</label><select data-k="par">${opts}</select>`;
+const pe=$('pedit');if(pe)pe.onclick=()=>openEd(s)}
+$('props').onchange=e=>{const t=e.target,k=t.dataset.k,s=S1();if(!s||!k)return;
+const v=t.type==='checkbox'?t.checked:t.type==='number'?(parseFloat(t.value)||0):t.value;
+if(k==='pos'||k==='size')s[k][+t.dataset.i]=k==='size'?Math.max(.1,v):v;
+else if(k==='par'){const p=SVC.includes(v)?v:+v;if(typeof p==='number'&&(p===s.id||desc(s).some(d=>d.id===p)))return;s.par=p;exp.add(p);syncAll()}
+else if(k==='role'){s.role=v;const R=ROLES[v];if(R){s.color=R.c;s.can=R.can}}
+else if(k==='shape'){s.shape=v;scene.remove(s.mesh);mkMesh(s)}
+else s[k]=v;
+if(is3D(s))sync(s);push();renderTree();if(k==='role'||k==='par')renderProps()};
+
+/* ---------- aksi ---------- */
+function targetFor(cls){const s=S1(),P=s&&typeof s.par==='number'?byId(s.par):null;
+if(cls==='PointLight'){const p=s&&(s.cls==='Part'?s:P&&P.cls==='Part'?P:null);return p?p.id:null}
+if(cls==='TextLabel'){const g=s&&(s.cls==='ScreenGui'?s:P&&P.cls==='ScreenGui'?P:null);return g?g.id:null}
+const def={Script:'ServerScriptService',LocalScript:'StarterPlayerScripts',ModuleScript:'ReplicatedStorage',ScreenGui:'StarterGui'}[cls]||'Workspace';
+if(curSvc)return curSvc;
+if(s&&['Script','LocalScript','ModuleScript','Sound'].includes(cls)&&['Model','Folder','Part'].includes(s.cls))return s.id;
+if(s&&['Model','Folder'].includes(s.cls)&&cls!=='ScreenGui')return s.id;
+return def}
+function insert(key){let cls=key,props={};
+if(key==='Ball'||key==='Cylinder'){cls='Part';props={shape:key,name:key}}
+if(ROLES[key]){const R=ROLES[key];cls='Part';props={name:key,shape:R.t,size:[...R.s],color:R.c,can:R.can,role:key}}
+const par=targetFor(cls);
+if(par===null){out('Pilih '+(cls==='PointLight'?'Part':'ScreenGui')+' dulu untuk menambah '+cls,'err');return}
+if(cls==='Part'){const sz=props.size||[8,2,8],x=Math.round(C.t.x),z=Math.round(C.t.z);props.size=[...sz];props.pos=[x,groundY(x,z)+sz[1]/2+(key==='Coin'?2:0),z]}
+const it=add(cls,props,par);exp.add(par);setSel(it.id);push();out('Menambah '+it.name+' ke '+(typeof par==='number'?byId(par).name:par))}
+function cloneTree(it,par,off){const c={...it};delete c.mesh;c.id=nid++;c.par=par;
+if(c.pos){c.pos=[...c.pos];c.size=[...c.size];if(off&&isWS(it)){c.pos[0]+=off;c.pos[2]+=off}}
+items.push(c);if(is3D(c))mkMesh(c);kids(it.id).forEach(k=>cloneTree(k,c.id,off));return c}
+function copy(){clip=[...selIds];out('Disalin '+clip.length+' objek')}
+function paste(){const s=S1();let par=curSvc||(s&&['Model','Folder'].includes(s.cls)?s.id:null);
+const ids=[];clip.forEach(id=>{const it=byId(id);if(!it)return;ids.push(cloneTree(it,par??it.par,4).id)});
+if(!ids.length)return;selIds=new Set(ids);curSvc=null;syncAll();refresh();push()}
+function dup(){const ids=[];[...selIds].forEach(id=>{const it=byId(id);if(it)ids.push(cloneTree(it,it.par,4).id)});if(!ids.length)return;selIds=new Set(ids);syncAll();refresh();push()}
+function removeIt(it){[...desc(it),it].forEach(d=>{if(d.mesh)scene.remove(d.mesh);const i=items.indexOf(d);if(i>=0)items.splice(i,1)})}
+function del(){[...selIds].forEach(id=>{const it=byId(id);if(it)removeIt(it)});selIds=new Set();refresh();push()}
+function group(){const r=[...selIds].map(byId).filter(Boolean);if(!r.length)return;const m=add('Model',{name:'Model'},r[0].par);r.forEach(x=>{x.par=m.id});exp.add(m.id);syncAll();setSel(m.id);push()}
+function ungroup(){[...selIds].map(byId).filter(i=>i&&['Model','Folder'].includes(i.cls)).forEach(m=>{kids(m.id).forEach(k=>k.par=m.par);items.splice(items.indexOf(m),1)});selIds=new Set();syncAll();refresh();push()}
+function selParent(){const s=S1();if(!s)return;if(typeof s.par==='number')setSel(s.par);else{curSvc=s.par;selIds=new Set();refresh()}}
+function focus(){const ps=selParts();if(!ps.length)return;const b=new THREE.Box3();ps.forEach(p=>b.expandByObject(p.mesh));
+C.t.copy(b.getCenter(new THREE.Vector3()));C.d=Math.max(12,b.getSize(new THREE.Vector3()).length()*1.4)}
+function flip(k){const ps=selParts();if(!ps.length)return;const nv=!ps[0][k];ps.forEach(p=>p[k]=nv);push();renderProps();out(k+' = '+nv)}
+function nudge(d){selParts().forEach(p=>{p.pos[1]+=d*(gsnap||1);sync(p)});push();renderProps()}
+function setTool(t){tool=t;$('tip').textContent={select:'Select: ketuk objek. Geser = putar kamera.',move:'Move: seret objek terpilih.',scale:'Scale: seret naik/turun.',rotate:'Rotate: seret kiri/kanan.'}[t];ribbon()}
+function cycSnap(){const a=[0,.5,1,2,4,8];gsnap=a[(a.indexOf(gsnap)+1)%a.length];ribbon()}
+function editSel(){const s=S1();if(s&&/Script/.test(s.cls))openEd(s);else out('Pilih Script dulu','err')}
+
+/* ---------- ribbon & docks ---------- */
+function ribbon(){const T={
+home:[['🖱','Select',()=>setTool('select'),tool==='select'],['✥','Move',()=>setTool('move'),tool==='move'],['⤢','Scale',()=>setTool('scale'),tool==='scale'],['⟳','Rotate',()=>setTool('rotate'),tool==='rotate'],0,['▭','Block',()=>insert('Part')],['●','Sphere',()=>insert('Ball')],['⬭','Cylinder',()=>insert('Cylinder')],['＋','Insert',openIns],0,['⧉','Copy',copy],['📋','Paste',paste],['❐','Dup',dup],['🗑','Hapus',del]],
+model:[['☑','Multi',()=>{multi=!multi;ribbon()},multi],['▣','Group',group],['▢','Ungroup',ungroup],['↑','Induk',selParent],['◎','Fokus',focus],0,['⚓','Anchor',()=>flip('anch')],['🔒','Lock',()=>flip('lock')],['⛶','Collide',()=>flip('can')],['color'],0,['▲','Naik',()=>nudge(1)],['▼','Turun',()=>nudge(-1)]],
+game:[['🏁','Spawn',()=>insert('Spawn')],['☠','Kill',()=>insert('Kill')],['✔','Check',()=>insert('Check')],['🪙','Coin',()=>insert('Coin')],['⬆','Jump',()=>insert('Jump')],0,['🧰','Toolbox',()=>openLeft('tool')],['⛰','Terrain',()=>openLeft('terr')],['☀','Light',()=>openLeft('lit')],0,['📝','Edit',editSel]],
+view:[['📂','Explorer',()=>{togSec('sx')}],['⚙','Props',()=>{togSec('sp')}],['🧾','Output',()=>$('out').classList.toggle('hide')],['◧','Kiri',()=>setDock('l',$('ldock').classList.contains('hide'))],['▦','Grid',()=>{gridM.visible=!gridM.visible}],['#','Snap '+(gsnap||'Off'),cycSnap],['⌂','Reset',resetCam]]}[rtab];
+const r=$('ribbon');r.innerHTML='';
+T.forEach(b=>{if(b===0){const s=document.createElement('span');s.className='rsep';r.appendChild(s);return}
+if(b[0]==='color'){const l=document.createElement('label');l.className='rb';l.style.margin=0;l.innerHTML='<i>🎨</i>Warna<input type="color" value="#a3a2a5">';
+l.querySelector('input').oninput=e=>{selParts().forEach(p=>{p.color=e.target.value;sync(p)})};l.querySelector('input').onchange=()=>{push();renderProps()};r.appendChild(l);return}
+const d=document.createElement('div');d.className='rb'+(b[3]?' on':'');d.innerHTML=`<i>${b[0]}</i>${b[1]}`;d.onclick=b[2];r.appendChild(d)})}
+document.querySelectorAll('.rt').forEach(b=>b.onclick=()=>{if(rtab===b.dataset.rt){$('ribbon').classList.toggle('hide');return}
+rtab=b.dataset.rt;$('ribbon').classList.remove('hide');document.querySelectorAll('.rt').forEach(x=>x.classList.toggle('on',x===b));ribbon()});
+function setDock(s,open){$(s+'dock').classList.toggle('hide',!open);$(s+'rs').classList.toggle('hide',!open);$('e'+s).classList.toggle('show',!open)}
+function hdl(h,s){let x0=null,w0=0;
+h.onpointerdown=e=>{h.setPointerCapture(e.pointerId);x0=e.clientX;w0=$(s+'dock').offsetWidth};
+h.onpointermove=e=>{if(x0===null)return;const dx=e.clientX-x0;$(s+'dock').style.width=Math.max(100,Math.min(innerWidth*.7,w0+(s==='r'?-dx:dx)))+'px'};
+h.onpointerup=e=>{if(x0!==null&&Math.abs(e.clientX-x0)<5)setDock(s,false);x0=null};h.onpointercancel=()=>{x0=null}}
+hdl($('lrs'),'l');hdl($('rrs'),'r');
+$('el').onclick=()=>setDock('l',true);$('er').onclick=()=>setDock('r',true);
+function openLeft(t){setDock('l',true);document.querySelectorAll('.ltab').forEach(b=>b.classList.toggle('on',b.dataset.l===t));document.querySelectorAll('.lp').forEach(p=>p.classList.toggle('hide',p.id!=='lp-'+t))}
+document.querySelectorAll('.ltab').forEach(b=>b.onclick=()=>openLeft(b.dataset.l));
+document.querySelectorAll('.chev').forEach(c=>c.onclick=()=>$(c.dataset.c).classList.toggle('col'));
+function togSec(id){setDock('r',true);$(id).classList.toggle('hide')}
+$('oclr').onclick=()=>{$('olog').innerHTML=''};$('ocls').onclick=()=>$('out').classList.add('hide');
+function openIns(){$('ins').classList.add('on');$('iq').value='';fillIns()}
+function fillIns(){const q=$('iq').value.toLowerCase();$('il').innerHTML=CAT.filter(c=>(c[1]+c[2]).toLowerCase().includes(q)).map(c=>`<div class="ii" data-c="${c[0]}"><b>${c[1]}</b><small>${c[2]}</small></div>`).join('')}
+$('iq').oninput=fillIns;$('icl').onclick=()=>$('ins').classList.remove('on');
+$('il').onclick=e=>{const d=e.target.closest('[data-c]');if(d){$('ins').classList.remove('on');insert(d.dataset.c)}};
+
+/* ---------- toolbox / light ---------- */
+$('tadd').onclick=()=>{const ids=$('tid').value.split(/[\s,;]+/).map(v=>parseInt(v)).filter(v=>v>0);if(!ids.length)return;
+const x=Math.round(C.t.x),z=Math.round(C.t.z);let o;
+ids.forEach((id,i)=>{o=add('Asset',{name:(ids.length===1&&$('tname').value)||('Asset '+id),assetId:id,pos:[x+i*8,groundY(x+i*8,z)+3,z]},'Workspace')});
+exp.add('Workspace');setSel(o.id);push();$('tid').value='';$('tname').value='';out(ids.length+' ID Toolbox ditambahkan','ok')};
+$('clock').oninput=()=>{clock=+$('clock').value;applyClock()};$('clock').onchange=push;
+
+/* ---------- editor script ---------- */
+const TPL={hello:'print("Hello World")\n',touch:'local part=script.Parent\npart.Touched:Connect(function(hit)\n\tprint(hit.Name)\nend)\n',ls:'game.Players.PlayerAdded:Connect(function(p)\n\tlocal ls=Instance.new("Folder") ls.Name="leaderstats" ls.Parent=p\n\tlocal v=Instance.new("IntValue") v.Name="Poin" v.Parent=ls\nend)\n',loop:'while true do\n\ttask.wait(1)\n\tprint("tick")\nend\n',remote:'local RS=game:GetService("ReplicatedStorage")\nlocal ev=Instance.new("RemoteEvent") ev.Name="Event" ev.Parent=RS\nev.OnServerEvent:Connect(function(plr,...)\n\tprint(plr.Name,...)\nend)\n'};
+let edId=null,edFs=13;
+function openEd(it){edId=it.id;$('edn').textContent=it.name+' ('+it.cls+')';$('edt').value=it.src||'';$('ed').classList.add('on')}
+$('edt').oninput=()=>{const it=byId(edId);if(it)it.src=$('edt').value};
+$('edx').onclick=()=>{$('ed').classList.remove('on');push();out('Script disimpan','ok')};
+$('edtp').onchange=e=>{if(!e.target.value)return;const t=$('edt');t.value+=(t.value&&!t.value.endsWith('\n')?'\n':'')+TPL[e.target.value];e.target.value='';t.oninput()};
+$('edtab').onclick=()=>{const t=$('edt'),a=t.selectionStart;t.value=t.value.slice(0,a)+'\t'+t.value.slice(t.selectionEnd);t.selectionStart=t.selectionEnd=a+1;t.focus();t.oninput()};
+$('edm').onclick=()=>{edFs=Math.max(9,edFs-1);$('edt').style.fontSize=edFs+'px'};$('edp').onclick=()=>{edFs=Math.min(24,edFs+1);$('edt').style.fontSize=edFs+'px'};
+
+/* ---------- input viewport ---------- */
 const rc=new THREE.Raycaster(),P=new Map();let drag=null,moved=0,pv=null;
+const boxes=[];
+function updBoxes(){const ps=play?[]:selParts().slice(0,40);
+while(boxes.length<ps.length){const b=new THREE.BoxHelper(new THREE.Object3D(),0x00a2ff);scene.add(b);boxes.push(b)}
+boxes.forEach((b,i)=>{if(i<ps.length){b.visible=true;b.setFromObject(ps[i].mesh)}else b.visible=false})}
 function ndc(e){const r=cv.getBoundingClientRect();return new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1)}
-function pick(e){rc.setFromCamera(ndc(e),cam);const h=rc.intersectObjects(objs.map(o=>o.mesh))[0];return h?h.object.userData.o:null}
+function pick(e){rc.setFromCamera(ndc(e),cam);const h=rc.intersectObjects(items.filter(i=>i.mesh&&i.mesh.visible&&!i.lock).map(i=>i.mesh))[0];return h?byId(h.object.userData.id):null}
 function planePt(e,y){rc.setFromCamera(ndc(e),cam);const t=new THREE.Vector3();return rc.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),-y),t)?t:null}
-const snapv=v=>$('snap').checked?Math.round(v):v;
 function pair(){const a=[...P.values()];return{d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),x:(a[0].x+a[1].x)/2,y:(a[0].y+a[1].y)/2}}
 cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;
-if(P.size===1){drag=null;if(!play&&sel&&tool!=='select'&&pick(e)===sel){const p=planePt(e,sel.pos[1]);
-drag={x0:e.clientX,y0:e.clientY,off:p?[sel.pos[0]-p.x,sel.pos[2]-p.z]:[0,0],s0:[...sel.size],r0:sel.ry}}}
+if(P.size===1){drag=null;const ps=selParts();
+if(!play&&tool!=='select'&&ps.length){const h=pick(e);if(h&&ps.includes(h)){const p0=planePt(e,h.pos[1]);
+drag={x0:e.clientX,y0:e.clientY,p0,h,base:[h.pos[0],h.pos[2]],ps:ps.map(i=>({i,pos:[...i.pos],size:[...i.size],ry:i.ry}))}}}}
 else if(P.size===2){drag=null;pv=pair()}});
 cv.addEventListener('pointermove',e=>{const q=P.get(e.pointerId);if(!q)return;
 const dx=e.clientX-q.x,dy=e.clientY-q.y;moved+=Math.abs(dx)+Math.abs(dy);q.x=e.clientX;q.y=e.clientY;
 if(P.size===2&&pv){const n=pair();C.d*=pv.d/Math.max(n.d,1);
-if(!play){const k=C.d*.0015,mx=n.x-pv.x,my=n.y-pv.y;
-C.t.x-=Math.cos(C.yaw)*mx*k;C.t.z+=Math.sin(C.yaw)*mx*k;C.t.x+=-Math.sin(C.yaw)*my*k;C.t.z+=-Math.cos(C.yaw)*my*k}pv=n}
+if(!play){const k=C.d*.0015,mx=n.x-pv.x,my=n.y-pv.y;C.t.x-=Math.cos(C.yaw)*mx*k;C.t.z+=Math.sin(C.yaw)*mx*k;C.t.x+=-Math.sin(C.yaw)*my*k;C.t.z+=-Math.cos(C.yaw)*my*k}pv=n}
 else if(P.size===1){
-if(drag){if(tool==='move'){const p=planePt(e,sel.pos[1]);if(p){sel.pos[0]=snapv(p.x+drag.off[0]);sel.pos[2]=snapv(p.z+drag.off[1])}}
-else if(tool==='scale'){const f=Math.max(.1,1-(e.clientY-drag.y0)*.005);sel.size=drag.s0.map(v=>Math.max(.1,+(v*f).toFixed(2)))}
-else if(tool==='rotate'){sel.ry=snapv(drag.r0+(e.clientX-drag.x0)*.5)}sync(sel)}
+if(drag){if(tool==='move'){const p=planePt(e,drag.h.pos[1]);if(p&&drag.p0){const nx=snapv(drag.base[0]+p.x-drag.p0.x)-drag.base[0],nz=snapv(drag.base[1]+p.z-drag.p0.z)-drag.base[1];
+drag.ps.forEach(o=>{o.i.pos[0]=o.pos[0]+nx;o.i.pos[2]=o.pos[2]+nz;sync(o.i)})}}
+else if(tool==='scale'){const f=Math.max(.1,1-(e.clientY-drag.y0)*.005);drag.ps.forEach(o=>{o.i.size=o.size.map(v=>Math.max(.1,+(v*f).toFixed(2)));sync(o.i)})}
+else if(tool==='rotate'){drag.ps.forEach(o=>{const r=o.ry+(e.clientX-drag.x0)*.5;o.i.ry=gsnap>0?Math.round(r/15)*15:r;sync(o.i)})}}
 else{C.yaw-=dx*.008;C.pitch+=dy*.008}}});
 function up(e){const was=P.size;P.delete(e.pointerId);
-if(was===1){if(drag){if(moved>3)push();renderProps();drag=null}else if(moved<6&&!play)select(pick(e))}
+if(was===1){if(drag){if(moved>3)push();renderProps();drag=null}
+else if(moved<6&&!play){const h=pick(e);if(h)setSel(h.id,multi);else if(!multi)setSel(null)}}
 pv=null}
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 cv.addEventListener('wheel',e=>{e.preventDefault();C.d*=1+e.deltaY*.001},{passive:false});
 
-/* ---------- PLAY MODE ---------- */
-let play=null;const keys={},J={x:0,y:0,jump:false};
-addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key===' ')J.jump=true});
+/* ---------- PLAY ---------- */
+const keys={},J={x:0,y:0,jump:false};
+addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;keys[e.key.toLowerCase()]=true;if(e.key===' ')J.jump=true;
+if(!play){if(e.key==='Delete')del();else if(e.key==='f')focus();else if(e.ctrlKey&&e.key==='c')copy();else if(e.ctrlKey&&e.key==='v')paste();else if(e.ctrlKey&&e.key==='d'){e.preventDefault();dup()}}});
 addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;if(e.key===' ')J.jump=false});
 const joy=$('joy'),knob=$('knob');let jid=null;
 function jmove(e){const r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;const m=Math.hypot(dx,dy),R=r.width/2;
@@ -279,22 +419,20 @@ $('jb').onpointerdown=()=>{J.jump=true};$('jb').onpointerup=$('jb').onpointercan
 function bounds(o){const r=o.ry*Math.PI/180,c=Math.abs(Math.cos(r)),s=Math.abs(Math.sin(r)),hx=(c*o.size[0]+s*o.size[2])/2,hz=(s*o.size[0]+c*o.size[2])/2,hy=o.size[1]/2;
 return{x0:o.pos[0]-hx,x1:o.pos[0]+hx,y0:o.pos[1]-hy,y1:o.pos[1]+hy,z0:o.pos[2]-hz,z1:o.pos[2]+hz}}
 let savedD=140;
-function startPlay(){if(play)return;select(null);selBox.visible=false;
-const bx=objs.filter(o=>o.can&&o.type!=='Asset').map(bounds),rl=[];let n=0;
-objs.forEach(o=>{if(o.role==='Check')rl.push({...bounds(o),o,k:'Check',ord:++n});else if(['Kill','Coin','Jump'].includes(o.role))rl.push({...bounds(o),o,k:o.role})});
-const sp=objs.find(o=>o.role==='Spawn');
+function startPlay(){if(play)return;selIds=new Set();curSvc=null;refresh();
+const ps=items.filter(i=>i.cls==='Part'&&isWS(i)),bx=ps.filter(i=>i.can).map(bounds),rl=[];let n=0;
+ps.forEach(o=>{if(o.role==='Check')rl.push({...bounds(o),o,k:'Check',ord:++n});else if(['Kill','Coin','Jump'].includes(o.role))rl.push({...bounds(o),o,k:o.role})});
+const sp=ps.find(o=>o.role==='Spawn');
 const spawn=sp?[sp.pos[0],sp.pos[1]+sp.size[1]/2+HH+.1,sp.pos[2]]:[0,groundY(0,0)+HH+.5,0];
 const g=new THREE.Group(),M=c=>new THREE.MeshLambertMaterial({color:c});
 const legs=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.5,.9),M(0x2e7d32));legs.position.y=-1.75;
 const torso=new THREE.Mesh(new THREE.BoxGeometry(2,2,1),M(0x0a84ff));
 const head=new THREE.Mesh(new THREE.SphereGeometry(.8,16,12),M(0xffd54f));head.position.y=1.7;
 g.add(legs,torso,head);scene.add(g);
-objs.forEach(o=>{if(o.type==='Asset')o.mesh.visible=false});
 play={x:spawn[0],y:spawn[1],z:spawn[2],vy:0,gr:false,spawn,bx,rl,g,coins:0,stage:0,got:new Set()};
-savedD=C.d;C.d=32;C.t.set(play.x,play.y,play.z);
-document.body.classList.add('play');setTimeout(resize,60)}
-function stopPlay(){if(!play)return;scene.remove(play.g);objs.forEach(o=>{o.mesh.visible=true});play=null;C.d=savedD;
-document.body.classList.remove('play');J.x=J.y=0;setTimeout(resize,60)}
+syncAll();savedD=C.d;C.d=32;C.t.set(play.x,play.y,play.z);
+document.body.classList.add('play');setTimeout(resize,60);out('Play dimulai (script Lua tidak dijalankan di browser)')}
+function stopPlay(){if(!play)return;scene.remove(play.g);play=null;syncAll();C.d=savedD;document.body.classList.remove('play');J.x=J.y=0;setTimeout(resize,60)}
 $('bplay').onclick=startPlay;$('bstop').onclick=stopPlay;
 function respawn(){play.x=play.spawn[0];play.y=play.spawn[1];play.z=play.spawn[2];play.vy=0}
 function stepPlay(dt){dt=Math.min(dt,.05);const pl=play;
@@ -323,11 +461,12 @@ $('hs').textContent='Coin: '+pl.coins+'   Stage: '+pl.stage}
 
 /* ---------- export / publish ---------- */
 let ref=0;
-function partXML(n,pos,size,ry,hex,mat,shape,extra,cls){
+const c3=(n,hex)=>`<Color3 name="${n}"><R>${parseInt(hex.slice(1,3),16)/255}</R><G>${parseInt(hex.slice(3,5),16)/255}</G><B>${parseInt(hex.slice(5,7),16)/255}</B></Color3>`;
+function partXML(n,pos,size,ry,hex,mat,shape,extra,cls,inner,anch){
 const c=Math.cos(ry*Math.PI/180),s=Math.sin(ry*Math.PI/180),r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
 const col=((255<<24)|(r<<16)|(g<<8)|b)>>>0;
-return`<Item class="${cls||'Part'}" referent="RBX${++ref}"><Properties><string name="Name">${esc(n)}</string><CoordinateFrame name="CFrame"><X>${pos[0]}</X><Y>${pos[1]}</Y><Z>${pos[2]}</Z><R00>${c}</R00><R01>0</R01><R02>${s}</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>${-s}</R20><R21>0</R21><R22>${c}</R22></CoordinateFrame><Vector3 name="size"><X>${size[0]}</X><Y>${size[1]}</Y><Z>${size[2]}</Z></Vector3><Color3uint8 name="Color3uint8">${col}</Color3uint8><token name="Material">${mat}</token><token name="shape">${shape}</token><bool name="Anchored">true</bool>${extra||''}</Properties></Item>`}
-function scriptXML(name,src){return`<Item class="Script" referent="RBX${++ref}"><Properties><string name="Name">${esc(name)}</string><ProtectedString name="Source"><![CDATA[${src.replace(/\]\]>/g,']] >')}]]></ProtectedString></Properties></Item>`}
+return`<Item class="${cls||'Part'}" referent="RBX${++ref}"><Properties><string name="Name">${esc(n)}</string><CoordinateFrame name="CFrame"><X>${pos[0]}</X><Y>${pos[1]}</Y><Z>${pos[2]}</Z><R00>${c}</R00><R01>0</R01><R02>${s}</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>${-s}</R20><R21>0</R21><R22>${c}</R22></CoordinateFrame><Vector3 name="size"><X>${size[0]}</X><Y>${size[1]}</Y><Z>${size[2]}</Z></Vector3><Color3uint8 name="Color3uint8">${col}</Color3uint8><token name="Material">${mat}</token><token name="shape">${shape}</token><bool name="Anchored">${anch!==false}</bool>${extra||''}</Properties>${inner||''}</Item>`}
+function scriptXML(cls,name,src,inner){return`<Item class="${cls}" referent="RBX${++ref}"><Properties><string name="Name">${esc(name)}</string><ProtectedString name="Source"><![CDATA[${src.replace(/\]\]>/g,']] >')}]]></ProtectedString></Properties>${inner||''}</Item>`}
 
 const LUA_GAME=`local Players=game:GetService("Players")
 local function onPlayer(p)
@@ -399,23 +538,32 @@ end
 for _,d in ipairs(workspace:GetDescendants()) do hook(d) end
 workspace.DescendantAdded:Connect(hook)`;
 
-function buildXML(){ref=0;let body='',cnt=0;
+function buildXML(){ref=0;let cnt=0;
 const hex=c=>'#'+c.map(v=>Math.round(v*255).toString(16).padStart(2,'0')).join('');
-objs.forEach(o=>{if(o.type==='Asset')return;
-let nm=o.name,cls='Part',ex=`<bool name="CanCollide">${o.can?'true':'false'}</bool>`;
-if(o.role==='Kill')nm='Kill_'+nm;else if(o.role==='Check')nm='Check_'+(++cnt)+'_'+nm;else if(o.role==='Coin')nm='Coin_'+nm;else if(o.role==='Jump')nm='Jump_'+nm;
-else if(o.role==='Spawn'){cls='SpawnLocation';ex+='<bool name="Neutral">true</bool>'}
-body+=partXML(nm,o.pos,o.size,o.ry,o.color,MATS[o.mat]||256,{Ball:0,Part:1,Cylinder:2}[o.type],ex,cls)});
+const xi=it=>{const ch=kids(it.id).map(xi).join('');const N=`<string name="Name">${esc(it.name)}</string>`,R=()=>`RBX${++ref}`;
+switch(it.cls){
+case 'Part':{let nm=it.name,cls='Part',ex=`<bool name="CanCollide">${!!it.can}</bool><bool name="Locked">${!!it.lock}</bool>`;
+if(it.role==='Kill')nm='Kill_'+nm;else if(it.role==='Check')nm='Check_'+(++cnt)+'_'+nm;else if(it.role==='Coin')nm='Coin_'+nm;else if(it.role==='Jump')nm='Jump_'+nm;
+else if(it.role==='Spawn'){cls='SpawnLocation';ex+='<bool name="Neutral">true</bool>'}
+return partXML(nm,it.pos,it.size,it.ry,it.color,MATS[it.mat]||256,{Ball:0,Block:1,Cylinder:2}[it.shape],ex,cls,ch,it.anch!==false)}
+case 'Model':case 'Folder':case 'ScreenGui':return`<Item class="${it.cls}" referent="${R()}"><Properties>${N}</Properties>${ch}</Item>`;
+case 'Script':case 'LocalScript':case 'ModuleScript':return scriptXML(it.cls,it.name,it.src||'',ch);
+case 'Sound':return`<Item class="Sound" referent="${R()}"><Properties>${N}<Content name="SoundId"><url>rbxassetid://${it.soundId|0}</url></Content><bool name="Looped">${!!it.loop}</bool><bool name="Playing">true</bool><float name="Volume">${it.vol}</float></Properties>${ch}</Item>`;
+case 'PointLight':return`<Item class="PointLight" referent="${R()}"><Properties>${N}<float name="Brightness">${it.bright}</float><float name="Range">${it.range}</float>${c3('Color',it.lcolor)}</Properties></Item>`;
+case 'TextLabel':return`<Item class="TextLabel" referent="${R()}"><Properties>${N}<string name="Text">${esc(it.text)}</string><int name="TextSize">${it.textSize|0}</int><UDim2 name="Position"><XS>0</XS><XO>${it.gx|0}</XO><YS>0</YS><YO>${it.gy|0}</YO></UDim2><UDim2 name="Size"><XS>0</XS><XO>${it.gw|0}</XO><YS>0</YS><YO>${it.gh|0}</YO></UDim2>${c3('BackgroundColor3',it.bg)}${c3('TextColor3',it.fg)}</Properties></Item>`;
+default:return''}};
+let ws=kids('Workspace').map(xi).join('');
 if(terrain){const G=40,cs=terrain.size/G;
 for(let i=0;i<G;i++)for(let j=0;j<G;j++){const x=-terrain.size/2+cs*(i+.5),z=-terrain.size/2+cs*(j+.5),s=sampler(x,z),h=Math.max(1,s.y);
-body+=partXML('Terrain_'+i+'_'+j,[+x.toFixed(2),+(h/2).toFixed(2),+z.toFixed(2)],[+cs.toFixed(2),+h.toFixed(2),+cs.toFixed(2)],0,hex(s.c),s.water?1568:1280,1)}}
-if(!objs.some(o=>o.role==='Spawn'))body+=partXML('SpawnLocation',[0,+(groundY(0,0)+3).toFixed(2),0],[6,1,6],0,'#a3a2a5',256,1,'<bool name="Neutral">true</bool>','SpawnLocation');
-let scripts='';
-if(objs.some(o=>['Kill','Check','Coin','Jump'].includes(o.role)))scripts+=scriptXML('GameSystem',LUA_GAME);
-const as=objs.filter(o=>o.type==='Asset'&&o.assetId);
-if(as.length){const items=as.map(o=>`{id=${parseInt(o.assetId)},x=${o.pos[0]},y=${o.pos[1]},z=${o.pos[2]},ry=${o.ry}}`).join(',');
-scripts+=scriptXML('ToolboxLoader',`local InsertService=game:GetService("InsertService")
-local items={${items}}
+ws+=partXML('Terrain_'+i+'_'+j,[+x.toFixed(2),+(h/2).toFixed(2),+z.toFixed(2)],[+cs.toFixed(2),+h.toFixed(2),+cs.toFixed(2)],0,hex(s.c),s.water?1568:1280,1,'','Part','',true)}}
+const parts=items.filter(i=>i.cls==='Part'&&isWS(i));
+if(!parts.some(o=>o.role==='Spawn'))ws+=partXML('SpawnLocation',[0,+(groundY(0,0)+3).toFixed(2),0],[6,1,6],0,'#a3a2a5',256,1,'<bool name="Neutral">true</bool>','SpawnLocation','',true);
+let gen='';
+if(parts.some(o=>['Kill','Check','Coin','Jump'].includes(o.role)))gen+=scriptXML('Script','GameSystem',LUA_GAME);
+const as=items.filter(i=>i.cls==='Asset'&&i.assetId&&isWS(i));
+if(as.length){const it=as.map(o=>`{id=${parseInt(o.assetId)},x=${o.pos[0]},y=${o.pos[1]},z=${o.pos[2]},ry=${o.ry}}`).join(',');
+gen+=scriptXML('Script','ToolboxLoader',`local InsertService=game:GetService("InsertService")
+local items={${it}}
 for _,it in ipairs(items) do
 	task.spawn(function()
 		local ok,res=pcall(function() return InsertService:LoadAsset(it.id) end)
@@ -427,29 +575,28 @@ for _,it in ipairs(items) do
 		end
 	end)
 end`)}
-if(lua.trim())scripts+=scriptXML('CustomScript',lua);
-return`<roblox version="4"><Item class="Workspace" referent="RBX0"><Properties><string name="Name">Workspace</string></Properties>${body}</Item><Item class="Lighting" referent="RBXL"><Properties><string name="Name">Lighting</string><double name="ClockTime">${clock}</double></Properties></Item><Item class="ServerScriptService" referent="RBXS"><Properties><string name="Name">ServerScriptService</string></Properties>${scripts}</Item></roblox>`}
-const log=t=>{$('log').textContent=t};
+const sv=(cls,inner,props)=>`<Item class="${cls}" referent="RBX${++ref}"><Properties><string name="Name">${cls}</string>${props||''}</Properties>${inner}</Item>`;
+const S=s=>kids(s).map(xi).join('');
+return`<roblox version="4">${sv('Workspace',ws)}${sv('Lighting','',`<double name="ClockTime">${clock}</double>`)}${sv('ReplicatedStorage',S('ReplicatedStorage'))}${sv('ServerScriptService',gen+S('ServerScriptService'))}${sv('ServerStorage',S('ServerStorage'))}${sv('StarterGui',S('StarterGui'))}${sv('StarterPack',S('StarterPack'))}${sv('StarterPlayer',sv('StarterPlayerScripts',S('StarterPlayerScripts')))}</roblox>`}
+const plog=t=>{$('plog').textContent=t;out(t)};
 $('bpub').onclick=()=>$('modal').classList.add('on');
 $('bclose').onclick=()=>$('modal').classList.remove('on');
-$('bexp').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buildXML()],{type:'application/xml'}));a.download='map.rbxlx';a.click();log('File map.rbxlx dibuat.')};
+$('bexp').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buildXML()],{type:'application/xml'}));a.download='map.rbxlx';a.click();plog('File map.rbxlx dibuat.')};
 $('bsend').onclick=async()=>{
 const key=$('ak').value.trim(),uni=$('un').value.trim(),pl=$('pl').value.trim(),px=$('pxy').value.trim().replace(/\/$/,'')||'https://apis.roblox.com';
-if(!key||!uni||!pl){log('Isi API key, Universe ID, dan Place ID.');return}
-log('Membuat file & mengirim...');
+if(!key||!uni||!pl){plog('Isi API key, Universe ID, dan Place ID.');return}
+plog('Membuat file & mengirim...');
 try{const r=await fetch(`${px}/universes/v1/${uni}/places/${pl}/versions?versionType=${$('vt').value}`,{method:'POST',headers:{'x-api-key':key,'Content-Type':'application/xml'},body:buildXML()});
-const t=await r.text();log(r.ok?'Berhasil! '+t:'Gagal ('+r.status+') '+t)}
-catch(e){log('Gagal terhubung. Roblox memblokir akses langsung dari browser (CORS), isi URL Worker proxy. '+e.message)}};
+const t=await r.text();plog(r.ok?'Berhasil! '+t:'Gagal ('+r.status+') '+t)}
+catch(e){plog('Gagal terhubung. Roblox memblokir akses langsung dari browser (CORS), isi URL Worker proxy. '+e.message)}};
 
 /* ---------- init ---------- */
-let saved=null;try{saved=localStorage.getItem('mapstudio2')}catch(e){}
+let saved=null;try{saved=localStorage.getItem('mapstudio3')}catch(e){}
 if(saved){try{restore(saved);hist=[saved];hi=0}catch(e){saved=null}}
-if(!saved){newObj('Part',[0,-.5,0],[512,1,512],'#6b7280','Baseplate');applyClock();renderList();renderProps();push()}
-setTool('select');resize();
+if(!saved){add('Part',{name:'Baseplate',pos:[0,-.5,0],size:[512,1,512],color:'#6b7280',lock:true},'Workspace');applyClock();refresh();push()}
+if(innerWidth>=700)setDock('r',true);
+setTool('select');resize();out('Maps Studio siap.','ok');
 let last=performance.now();
 (function loop(now){requestAnimationFrame(loop);const dt=(now-last)/1000;last=now;
-if(play)stepPlay(dt);
-updCam();
-if(sel&&!play){selBox.visible=true;selBox.setFromObject(sel.mesh)}else selBox.visible=false;
-renderer.render(scene,cam)})(last);
+if(play)stepPlay(dt);updCam();updBoxes();renderer.render(scene,cam)})(last);
 </script></body></html>
